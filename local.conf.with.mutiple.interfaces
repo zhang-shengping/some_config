@@ -17,6 +17,8 @@
 # Note that if ``localrc`` is present it will be used in favor of this section.
 [[local|localrc]]
 
+RECLONE=False
+
 # Minimal Contents
 # ----------------
 
@@ -37,7 +39,7 @@ SERVICE_PASSWORD=$ADMIN_PASSWORD
 # from an Ethernet interface to a bridge on the host. Setting it here also
 # makes it available for ``openrc`` to include when setting ``OS_AUTH_URL``.
 # Neither is set by default.
-HOST_IP=10.145.108.36
+HOST_IP=10.145.111.170
 PUBLIC_INTERFACE=ens32
 #HOST_IPV6=2001:db8::7
 
@@ -77,6 +79,8 @@ NEUTRONCLIENT_BRANCH=mitaka-eol
 SWIFT_BRANCH=mitaka-eol
 REQUIREMENTS_BRANCH=mitaka-eol
 NOVNC_BRANCH=mitaka-eol
+BARBICAN_BRANCH=mitaka-eol
+BARBICANCLIENT_BRANCH=mitaka-eol
 
 disable_service n-novnc
 disable_service tempest
@@ -114,6 +118,12 @@ enable_service n-api
 enable_plugin neutron-lbaas https://github.com/F5Networks/neutron-lbaas.git stable/mitaka
 enable_plugin f5lbaas-driver https://github.com/F5Networks/f5-openstack-lbaasv2-driver.git mitaka
 enable_plugin f5lbaas-agent https://github.com/F5Networks/f5-openstack-agent.git mitaka
+
+enable_plugin barbican https://git.openstack.org/openstack/barbican mitaka-eol
+enable_plugin python-barbicanclient https://github.com/openstack/python-barbicanclient.git mitaka-eol
+enable_service rabbit mysql key
+
+
 #enable_service q-lbaas
 #enable_service q-fwaas
 #enable_service q-vpn
@@ -134,6 +144,9 @@ OVS_PHYSICAL_BRIDGE=$PUBLIC_BRIDGE
 PHYSICAL_NETWORK=physnet
 PROVIDER_NETWORK_TYPE=flat
 Q_ML2_PLUGIN_TYPE_DRIVERS=flat,vxlan
+
+external_network_bridge=
+OVS_BRIDGE_MAPPINGS=public:br-ex,client:ext-net,server:int-net
 
 PIP_UPGRADE=True
 
@@ -164,3 +177,9 @@ SWIFT_REPLICAS=1
 # moved by setting ``SWIFT_DATA_DIR``. The directory will be created
 # if it does not exist.
 SWIFT_DATA_DIR=$DEST/data
+
+
+# use TryStack git mirror
+GIT_BASE=http://git.trystack.cn
+NOVNC_REPO=http://git.trystack.cn/kanaka/noVNC.git
+SPICE_REPO=http://git.trystack.cn/git/spice/spice-html5.git
